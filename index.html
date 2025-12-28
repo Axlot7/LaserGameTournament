@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Troll turnaj</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=WDXL+Lubrifont+SC&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      background: radial-gradient(circle at top, rgb(83, 21, 95), #000000);
+      font-family: "WDXL Lubrifont SC", system-ui, sans-serif;
+      color:#fff;
+    }
+
+    .hero { text-align:center; padding:48px 16px 18px; }
+    .hero h1{
+      margin:0 0 12px;
+      font-family:"Audiowide", cursive;
+      font-size:clamp(2.2rem, 6vw, 3.8rem);
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+    }
+    .hero p{
+      margin:0;
+      opacity:0.7;
+      font-size:1.05rem;
+      letter-spacing:0.08em;
+    }
+
+    .container{
+      width:min(900px, 92%);
+      margin:0 auto;
+      padding:18px 0 60px;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
+
+    .card{
+      padding:24px;
+      background:rgba(255,255,255,0.07);
+      border-radius:28px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.45);
+      opacity:0.92;
+      border:1px solid rgba(255,255,255,0.10);
+      backdrop-filter:blur(10px);
+    }
+
+    .card h2{
+      margin:0 0 10px;
+      font-family:"Audiowide", cursive;
+      font-size:1.35rem;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+    }
+
+    .card p{
+      margin:0;
+      opacity:0.85;
+      line-height:1.4;
+      font-size:1.05rem;
+      letter-spacing:0.04em;
+    }
+
+    /* --- HYPE LIST --- */
+    .hypeSub{
+      margin: 0 0 14px;
+      opacity: .78;
+      letter-spacing: .06em;
+      line-height: 1.25;
+    }
+
+    .hypeGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .pill{
+      border-radius: 18px;
+      padding: 12px 14px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    .pill .t{
+      font-family:"Audiowide", cursive;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: .95rem;
+      margin:0 0 6px;
+      opacity:.95;
+    }
+
+    .pill .d{
+      margin:0;
+      opacity:.86;
+      line-height: 1.2;
+      letter-spacing: .03em;
+    }
+
+    .pillWide{ grid-column: 1 / -1; }
+
+    /* --- PLAYERS SLIDE --- */
+    .slide{
+      display:grid;
+      grid-template-columns:1.1fr 1fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .statBox{
+      border-radius:22px;
+      padding:18px;
+      background:rgba(0,0,0,0.18);
+      border:1px solid rgba(255,255,255,0.10);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .label{
+      opacity:0.65;
+      letter-spacing:0.08em;
+      font-size:0.95rem;
+      text-transform:uppercase;
+    }
+
+    .bigNumber{
+      font-family:"Audiowide", cursive;
+      font-size:clamp(2.2rem, 5vw, 3.1rem);
+      letter-spacing:0.08em;
+      margin:0;
+      line-height:1.05;
+    }
+
+    .sub{
+      opacity:0.78;
+      font-size:1rem;
+      letter-spacing:0.05em;
+      margin:0;
+    }
+
+    .mapBox{
+      margin-top:10px;
+      padding:14px;
+      border-radius:20px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.10);
+      overflow:hidden;
+    }
+
+    .mapHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .mapHead .title{
+      font-family:"Audiowide", cursive;
+      letter-spacing:0.10em;
+      text-transform:uppercase;
+      opacity:0.92;
+      font-size:1rem;
+      margin:0;
+    }
+
+    .miniMap{
+      width:100%;
+      height:140px;
+      display:block;
+      border-radius:16px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .chartWrap{
+      border-radius:22px;
+      padding:14px;
+      background:rgba(0,0,0,0.18);
+      border:1px solid rgba(255,255,255,0.10);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      overflow:hidden;
+    }
+
+    .chartHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap:10px;
+    }
+
+    .chartHeader .title{
+      font-family:"Audiowide", cursive;
+      letter-spacing:0.10em;
+      text-transform:uppercase;
+      opacity:0.9;
+      font-size:1.05rem;
+    }
+
+    .chartHeader .hint{
+      opacity:0.6;
+      letter-spacing:0.05em;
+      font-size:0.95rem;
+      text-align:right;
+    }
+
+    canvas{
+      display:block;
+      width:100%;
+      height:240px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    /* --- REVIEWS --- */
+    .card.reviews h2{ margin-bottom: 4px; }
+
+    .reviewsSub{
+      margin: 0 0 22px;
+      opacity: .78;
+      letter-spacing: .06em;
+      line-height: 1.25;
+    }
+
+    .reviewBox{
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+      overflow: hidden;
+    }
+
+    .reviewTop{
+      display:flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 2px;
+    }
+
+    .reviewName{
+      font-family:"Audiowide", cursive;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-size: 1.18rem;
+      opacity: 1;
+      color: #ffffff;
+      text-shadow:
+        0 0 10px rgba(255,255,255,0.35),
+        0 0 20px rgba(255,255,255,0.18);
+    }
+
+    .reviewStars{
+      font-size: 1.65rem;
+      line-height: 1;
+      letter-spacing: .14em;
+      white-space: nowrap;
+      color: #ffd86b;
+      text-shadow:
+        0 0 12px rgba(255, 216, 107, 0.45),
+        0 0 26px rgba(255, 216, 107, 0.25),
+        0 0 44px rgba(255, 216, 107, 0.12);
+      filter: drop-shadow(0 0 10px rgba(255,216,107,0.18));
+      transform: translateY(1px);
+    }
+
+    .reviewText{
+      margin-top: 2px;
+      opacity: .92;
+      line-height: 1.16;
+      letter-spacing: .03em;
+      font-size: 1.02rem;
+    }
+
+    .fadeOut { opacity: 0; transform: translateY(4px); transition: opacity .35s ease, transform .35s ease; }
+    .fadeIn  { opacity: 1; transform: translateY(0px); transition: opacity .35s ease, transform .35s ease; }
+
+    /* --- COUNTDOWN (Nokia snake) --- */
+    .countdownSub{
+      margin: 0 0 14px;
+      opacity: .78;
+      letter-spacing: .06em;
+      line-height: 1.25;
+    }
+
+    .countWrap{
+      border-radius: 22px;
+      padding: 14px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+      overflow:hidden;
+    }
+
+    .countTop{
+      display:flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .countTitle{
+      font-family:"Audiowide", cursive;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      opacity:.95;
+      font-size: 1.05rem;
+      margin:0;
+    }
+
+    .timeRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+
+    .timeBox{
+      flex: 1 1 140px;
+      min-width: 120px;
+      border-radius: 18px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      display:flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .timeLabel{
+      opacity:.62;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      font-size:.9rem;
+    }
+
+    .timeVal{
+      font-family:"Audiowide", cursive;
+      letter-spacing:.10em;
+      font-size: 1.4rem;
+      text-shadow: 0 0 12px rgba(255,255,255,0.20);
+    }
+
+    .snake{
+      width:100%;
+      height:90px;
+      display:block;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      image-rendering: pixelated;
+    }
+
+    /* --- CONTACT -> QR --- */
+    .qrWrap{
+      border-radius: 22px;
+      padding: 14px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+      overflow:hidden;
+    }
+
+    .qrHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .qrHead .title{
+      font-family:"Audiowide", cursive;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      opacity:0.9;
+      font-size:1.05rem;
+    }
+
+    .qrHead .hint{
+      opacity:0.62;
+      letter-spacing: .06em;
+      font-size: .95rem;
+      text-align:right;
+    }
+
+    .qrCanvas{
+      width:100%;
+      height:260px;
+      display:block;
+      border-radius:16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      image-rendering: pixelated;
+    }
+
+    .qrSub{
+      margin-top:10px;
+      opacity:.74;
+      letter-spacing:.05em;
+      line-height:1.25;
+    }
+
+    .tiny{
+      text-align:center;
+      opacity:0.55;
+      font-size:0.9rem;
+      letter-spacing:0.06em;
+    }
+
+    @media (max-width:760px){
+      .slide{ grid-template-columns:1fr; }
+      canvas{ height:220px; }
+      .reviewStars{ font-size: 1.45rem; letter-spacing: .12em; }
+      .hypeGrid{ grid-template-columns: 1fr; }
+      .pillWide{ grid-column: auto; }
+      .snake{ height: 80px; }
+      .qrCanvas{ height: 240px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="hero">
+    <h1>Největší laser game turnaj</h1>
+    <p>Největší • Nejskvělejší • Nejlepší</p>
+  </div>
+
+  <div class="container">
+
+    <!-- 1) HYPE -->
+    <div class="card">
+      <h2>Turnaj, který přepíše historii</h2>
+      <p class="hypeSub">
+        To není “turnaj”. To je <b>historická událost</b>, která bude mít vlastní kapitolu ve školních učebnicích.
+      </p>
+
+      <div class="hypeGrid">
+        <div class="pill">
+          <p class="t">Největší</p>
+          <p class="d">Aréna jde vidět z každé části vesmíru.</p>
+        </div>
+
+        <div class="pill">
+          <p class="t">Nejnovější</p>
+          <p class="d">Používáme technologii z roku 6724.</p>
+        </div>
+
+        <div class="pill">
+          <p class="t">Nejlepší</p>
+          <p class="d">Konkurence po tomhle přepíná na šachy. Je to pro ně bezpečnější.</p>
+        </div>
+
+        <div class="pill">
+          <p class="t">100 let trvání</p>
+          <p class="d">Turnaj běží <b>celé století</b>. Kdo vyhraje, má časem i vlastní muzeum.</p>
+        </div>
+
+        <div class="pill">
+          <p class="t">Globální hype</p>
+          <p class="d">367 zemí, 12 dimenzí, 3 galaxie.</p>
+        </div>
+
+        <div class="pill">
+          <p class="t">Nejstarší</p>
+          <p class="d">Turnaj začal existovat 3000 let před vznikem Země.</p>
+        </div>
+
+        <div class="pill pillWide">
+          <p class="t">Legendární prizepool</p>
+          <p class="d">
+            Odměna je tak masivní, že ji nejde vypsat do jedný řádky.
+            Zahrnuje slávu napříč 3 galaxiemi, VIP přístup do lobby reality a podpis od časoprostoru.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2) PLAYERS -->
+    <div class="card">
+      <h2>Hráči</h2>
+
+      <p style="margin:0 0 14px; opacity:.75; letter-spacing:.06em;">
+        Turnaj je tak neuvěřitelně masivní že se zůčastní hráči ze všech <b>367 zemí</b>.
+      </p>
+
+      <div class="slide">
+        <div class="statBox">
+          <div class="label">Hráči přihlášení na turnaj</div>
+          <div id="players" class="bigNumber">100 000+</div>
+          <p id="rate" class="sub">přibývá: +0 / s</p>
+
+          <div class="mapBox">
+            <div class="mapHead">
+              <p class="title">Mapa hráčů</p>
+            </div>
+
+            <svg class="miniMap" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" aria-label="Mapa účasti">
+              <g opacity="0.18" stroke="white" stroke-width="1">
+                <path d="M30 60 H570" />
+                <path d="M30 130 H570" />
+                <path d="M30 200 H570" />
+                <path d="M120 25 V235" />
+                <path d="M240 25 V235" />
+                <path d="M360 25 V235" />
+                <path d="M480 25 V235" />
+              </g>
+
+              <g fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.18)" stroke-width="2">
+                <path id="c1" d="M78,92 C64,70 85,48 124,52 C148,54 162,72 154,94 C148,112 130,130 106,126 C91,124 84,110 78,92 Z"/>
+                <path id="c2" d="M212,78 C224,52 262,44 292,60 C318,74 320,106 296,124 C270,144 236,132 224,110 C216,96 206,92 212,78 Z"/>
+                <path id="c3" d="M360,70 C372,46 418,42 452,62 C480,78 474,118 444,136 C414,156 378,144 368,118 C360,98 350,88 360,70 Z"/>
+                <path id="c4" d="M410,176 C426,154 470,152 500,172 C526,190 516,224 486,236 C456,248 420,234 410,212 C404,198 398,190 410,176 Z"/>
+                <path id="c5" d="M130,170 C152,148 198,152 220,174 C242,196 228,228 200,236 C168,246 140,230 132,206 C126,192 112,186 130,170 Z"/>
+              </g>
+
+              <g id="playerDots"></g>
+
+              <g id="tournamentDot">
+                <circle id="dot" cx="315" cy="135" r="7" fill="rgba(255,255,255,0.95)"/>
+                <circle id="pulse" cx="315" cy="135" r="16" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2" opacity="0.8"/>
+                <text x="330" y="140" fill="rgba(255,255,255,0.85)" font-size="14" font-family="Audiowide, system-ui, sans-serif" letter-spacing="2">
+                  TURNAJ
+                </text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="chartWrap">
+          <div class="chartHeader">
+            <div class="title">Růst popularity</div>
+            <div class="hint">čas →<br>hráči ↑</div>
+          </div>
+          <canvas id="chart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3) REVIEWS -->
+    <div class="card reviews">
+      <h2>Recenze</h2>
+      <p class="reviewsSub">Nejlepší recenze na světě, ve vesmíru a ve všech přilehlých dimenzích.</p>
+
+      <div class="reviewBox" id="reviewBox">
+        <div class="reviewTop">
+          <div class="reviewName" id="reviewName">Načítám legendu…</div>
+          <div class="reviewStars" id="reviewStars">★★★★★★★★★★</div>
+        </div>
+
+        <div class="reviewText" id="reviewText">
+          Tohle je tak dobrý, že jsem zapomněl, co je konkurence.
+        </div>
+      </div>
+    </div>
+
+    <!-- 4) COUNTDOWN -->
+    <div class="card">
+      <h2>Odpočítávání do začátku</h2>
+      <p class="countdownSub">
+        Začínáme brzy. (Brzy = v roce, kdy už budou lasery legální i pro Mars.)
+      </p>
+
+      <div class="countWrap">
+        <div class="countTop">
+          <p class="countTitle">T-minus</p>
+        </div>
+
+        <canvas class="snake" id="snake"></canvas>
+
+        <div class="timeRow">
+          <div class="timeBox"><div class="timeLabel">Dny</div><div class="timeVal" id="cdDays">---</div></div>
+          <div class="timeBox"><div class="timeLabel">Hodiny</div><div class="timeVal" id="cdHours">---</div></div>
+          <div class="timeBox"><div class="timeLabel">Minuty</div><div class="timeVal" id="cdMins">---</div></div>
+          <div class="timeBox"><div class="timeLabel">Sekundy</div><div class="timeVal" id="cdSecs">---</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5) CONTACT -> QR -->
+    <div class="card">
+      <h2>Kontakt</h2>
+      <p class="countdownSub">
+        Naskenuj QR a dostaneš kontakt… nebo aspoň lore. (Troll-mode ON)
+      </p>
+
+      <div class="qrWrap">
+        <div class="qrHead">
+          <div class="title">QR</div>
+        </div>
+
+        <canvas class="qrCanvas" id="qr"></canvas>
+
+        <p class="qrSub">
+        </p>
+      </div>
+    </div>
+
+
+    </div>
+
+  </div>
+
+  <script>
+    // ---------------------------
+    // 2) PLAYERS (counter + map + chart)
+    // ---------------------------
+    let players = 54834;
+
+    let t = 0;
+    const tickMs = 120;
+    const baseRate = 1.7;
+    const growth = 0.0036;
+    const jitter = 0.12;
+
+    const playersEl = document.getElementById("players");
+    const rateEl = document.getElementById("rate");
+
+    const svgNS = "http://www.w3.org/2000/svg";
+    const dotsLayer = document.getElementById("playerDots");
+
+    function formatNumber(n){
+      return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    function spawnPlayerDot(){
+      const padX = 35, padY = 30;
+      const x = padX + Math.random() * (600 - padX*2);
+      const y = padY + Math.random() * (260 - padY*2);
+
+      const dot = document.createElementNS(svgNS, "circle");
+      dot.setAttribute("cx", x.toFixed(1));
+      dot.setAttribute("cy", y.toFixed(1));
+      dot.setAttribute("r", "0.5");
+      dot.setAttribute("fill", "rgba(255,255,255,0.95)");
+      dot.setAttribute("opacity", "0.0");
+
+      const glow = document.createElementNS(svgNS, "circle");
+      glow.setAttribute("cx", x.toFixed(1));
+      glow.setAttribute("cy", y.toFixed(1));
+      glow.setAttribute("r", "1");
+      glow.setAttribute("fill", "none");
+      glow.setAttribute("stroke", "rgba(255,255,255,0.55)");
+      glow.setAttribute("stroke-width", "2");
+      glow.setAttribute("opacity", "0.0");
+
+      const g = document.createElementNS(svgNS, "g");
+      g.appendChild(glow);
+      g.appendChild(dot);
+      dotsLayer.appendChild(g);
+
+      const lifeMs = 1600 + Math.random()*900;
+      const start = performance.now();
+
+      function animate(now){
+        const p = (now - start) / lifeMs;
+        if(p >= 1){ g.remove(); return; }
+
+        const easeOut = 1 - Math.pow(1 - p, 3);
+        const fadeIn = Math.min(1, easeOut * 6);
+        const fadeOut = Math.max(0, 1 - (p * 1.15));
+        const alpha = 0.9 * fadeIn * fadeOut;
+
+        const r = 1.5 + easeOut * 3.0;
+        const rg = 5 + easeOut * 10;
+
+        dot.setAttribute("opacity", alpha.toFixed(3));
+        dot.setAttribute("r", r.toFixed(2));
+
+        glow.setAttribute("opacity", (alpha*0.55).toFixed(3));
+        glow.setAttribute("r", rg.toFixed(2));
+
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    function dotSpawner(){
+      const burst = 1 + Math.floor(Math.random()*3);
+      for(let i=0;i<burst;i++) spawnPlayerDot();
+      const nextIn = 120 + Math.random()*260;
+      setTimeout(dotSpawner, nextIn);
+    }
+
+    const pulse = document.getElementById("pulse");
+    let pulseT = 0;
+
+    const canvas = document.getElementById("chart");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvasToDisplaySize(){
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      const w = Math.round(rect.width * dpr);
+      const h = Math.round(rect.height * dpr);
+
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        ctx.setTransform(1,0,0,1,0,0);
+        ctx.scale(dpr, dpr);
+      }
+    }
+
+    function clearChart(){
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+    }
+
+    function drawAxes(){
+      const rect = canvas.getBoundingClientRect();
+      const W = rect.width, H = rect.height;
+      ctx.lineWidth = 1;
+
+      for(let i=1;i<=4;i++){
+        const y = i * (H/5);
+        ctx.strokeStyle = "rgba(255,255,255,0.06)";
+        ctx.beginPath();
+        ctx.moveTo(14, y);
+        ctx.lineTo(W-14, y);
+        ctx.stroke();
+      }
+      for(let i=1;i<=6;i++){
+        const x = i * (W/7);
+        ctx.strokeStyle = "rgba(255,255,255,0.05)";
+        ctx.beginPath();
+        ctx.moveTo(x, 12);
+        ctx.lineTo(x, H-12);
+        ctx.stroke();
+      }
+    }
+
+    function drawCurve(nowPlayers){
+      const rect = canvas.getBoundingClientRect();
+      const W0 = rect.width, H0 = rect.height;
+
+      const padding = 16;
+      const W = W0 - padding*2;
+      const H = H0 - padding*2;
+
+      const k = 4.2;
+      const points = 90;
+
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "rgba(255,255,255,0.85)";
+      ctx.beginPath();
+
+      for(let i=0;i<=points;i++){
+        const xN = i/points;
+        const yN = (Math.exp(k*xN)-1)/(Math.exp(k)-1);
+
+        const x = padding + xN * W;
+        const y = padding + (1 - (0.86 * yN)) * H;
+
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+
+      const xEnd = padding + W;
+      const yEnd = padding + (1 - 0.86) * H;
+      ctx.fillStyle = "rgba(255,255,255,0.95)";
+      ctx.beginPath();
+      ctx.arc(xEnd, yEnd, 5.5, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.globalAlpha = 0.75;
+      ctx.font = "16px Audiowide, system-ui, sans-serif";
+      ctx.fillStyle = "rgba(255,255,255,0.8)";
+      ctx.textAlign = "right";
+      ctx.fillText(formatNumber(nowPlayers) + "+", W0 - padding, H0 - padding + 2);
+      ctx.globalAlpha = 1;
+    }
+
+    function renderChart(nowPlayers){
+      resizeCanvasToDisplaySize();
+      clearChart();
+      drawAxes();
+      drawCurve(nowPlayers);
+    }
+
+    function tickPlayers(){
+      t += tickMs/1000;
+      let rate = baseRate * Math.exp(growth * (t*60));
+      rate *= (1 + (Math.random()*2-1) * jitter);
+
+      players += rate * (tickMs/1000);
+      playersEl.textContent = formatNumber(players) + "+";
+      rateEl.textContent = "přibývá: +" + Math.max(1, Math.floor(rate)) + " / s";
+
+      pulseT += tickMs/1000;
+      const r = 14 + (Math.sin(pulseT*3) + 1) * 6;
+      pulse.setAttribute("r", r.toFixed(2));
+      pulse.setAttribute("opacity", (0.15 + (Math.sin(pulseT*3)+1)*0.18).toFixed(2));
+
+      renderChart(players);
+    }
+
+    // ---------------------------
+    // 3) REVIEWS
+    // ---------------------------
+    const reviews = [
+      { name: "Anonymní šampion", stars: "★★★★★★★★★★", text: "Nejvíc turnaj co jsem kdy neviděl. Realita se třese." },
+      { name: "Pro hráč z galaxie", stars: "★★★★★★★★★★", text: "Přiletěl jsem 14 světelných let. Stálo to za to. (asi)" },
+      { name: "Legenda z chatu", stars: "★★★★★★★★★★", text: "Hype roste rychleji než moje pingy. Totální W." },
+      { name: "Neviditelnej ninja", stars: "★★★★★★★★★★", text: "Byl jsem tam tak rychle, že mě nezměřil ani čas." },
+      { name: "Boss z arény", stars: "★★★★★★★★★★", text: "Takhle čistý turnaj se nehraje. Tohle se zažívá." },
+      { name: "Random týpek z tramvaje", stars: "★★★★★★★★★★", text: "Nejlepší věc co se stala lidstvu od Wi-Fi." },
+      { name: "Galaktický rozhodčí", stars: "★★★★★★★★★★", text: "Pravidla? Perfektní. Drama? Luxus. Laser? OP." },
+      { name: "Speedrunner reality", stars: "★★★★★★★★★★", text: "Dohrál jsem to dřív, než to začalo. 10/10." },
+      { name: "CEO Laseru", stars: "★★★★★★★★★★", text: "Konkurenční turnaje po tomhle zvažují odchod do důchodu." },
+      { name: "Žralok na skóre", stars: "★★★★★★★★★★", text: "Skóre tak vysoký, že to UI odmítlo zobrazit." },
+      { name: "Člověk co nikdy nechválí", stars: "★★★★★★★★★★", text: "Ok… tohle je fakt šíleně dobrý. A to říkám nerad." },
+      { name: "Mysteriózní tester", stars: "★★★★★★★★★★", text: "Testoval jsem 900 turnajů. Tenhle je 901. a nejlepší." }
+    ];
+
+    const reviewName = document.getElementById("reviewName");
+    const reviewStars = document.getElementById("reviewStars");
+    const reviewText = document.getElementById("reviewText");
+    const reviewBox = document.getElementById("reviewBox");
+
+    let reviewIndex = 0;
+
+    function showReview(i){
+      const r = reviews[i];
+      reviewName.textContent = r.name;
+      reviewStars.textContent = r.stars;
+      reviewText.textContent = r.text;
+    }
+
+    function rotateReview(){
+      reviewBox.classList.remove("fadeIn");
+      reviewBox.classList.add("fadeOut");
+
+      setTimeout(() => {
+        reviewIndex = (reviewIndex + 1) % reviews.length;
+        showReview(reviewIndex);
+
+        reviewBox.classList.remove("fadeOut");
+        reviewBox.classList.add("fadeIn");
+      }, 360);
+    }
+
+    // ---------------------------
+    // 4) COUNTDOWN (Nokia snake)
+    // ---------------------------
+    const cdDays = document.getElementById("cdDays");
+    const cdHours = document.getElementById("cdHours");
+    const cdMins = document.getElementById("cdMins");
+    const cdSecs = document.getElementById("cdSecs");
+
+    const target = new Date("2125-01-01T00:00:00");
+
+    const snakeCanvas = document.getElementById("snake");
+    const sctx = snakeCanvas.getContext("2d");
+
+    function resizeSnake(){
+      const dpr = window.devicePixelRatio || 1;
+      const rect = snakeCanvas.getBoundingClientRect();
+      const w = Math.round(rect.width * dpr);
+      const h = Math.round(rect.height * dpr);
+
+      if (snakeCanvas.width !== w || snakeCanvas.height !== h){
+        snakeCanvas.width = w;
+        snakeCanvas.height = h;
+        sctx.setTransform(1,0,0,1,0,0);
+        sctx.scale(dpr, dpr);
+      }
+    }
+
+    const cell = 10;
+    const pad = 12;
+    let cols = 0, rows = 0;
+
+    let snake = [];
+    let dir = {x:1, y:0};
+    let pendingDir = {x:1, y:0};
+    let stepAcc = 0;
+    const stepTime = 0.08;
+    let glowT = 0;
+
+    function buildGrid(){
+      resizeSnake();
+      const rect = snakeCanvas.getBoundingClientRect();
+      const W = rect.width, H = rect.height;
+      cols = Math.max(8, Math.floor((W - pad*2) / cell));
+      rows = Math.max(5, Math.floor((H - pad*2) / cell));
+    }
+
+    function resetSnake(){
+      buildGrid();
+      const sx = Math.floor(cols/4);
+      const sy = Math.floor(rows/2);
+      snake = [
+        {x:sx, y:sy},
+        {x:sx-1, y:sy},
+        {x:sx-2, y:sy},
+        {x:sx-3, y:sy},
+      ];
+      dir = {x:1, y:0};
+      pendingDir = {x:1, y:0};
+    }
+
+    function randInt(a,b){ return a + Math.floor(Math.random()*(b-a+1)); }
+
+    function willHitSelf(nx, ny){
+      for(let i=0;i<snake.length;i++){
+        if(snake[i].x === nx && snake[i].y === ny) return true;
+      }
+      return false;
+    }
+
+    function autoTurn(){
+      if(Math.random() > 0.18) return;
+
+      const options = [];
+      if(dir.x !== 0){
+        options.push({x:0, y:1});
+        options.push({x:0, y:-1});
+      } else {
+        options.push({x:1, y:0});
+        options.push({x:-1, y:0});
+      }
+
+      for(let tries=0; tries<4; tries++){
+        const pick = options[randInt(0, options.length-1)];
+        const head = snake[0];
+        const nx = head.x + pick.x;
+        const ny = head.y + pick.y;
+
+        const hitsWall = (nx < 0 || nx >= cols || ny < 0 || ny >= rows);
+        const hitsSelf = willHitSelf(nx, ny);
+        if(!hitsWall && !hitsSelf){
+          pendingDir = pick;
+          return;
+        }
+      }
+    }
+
+    function stepSnake(){
+      if(!(pendingDir.x === -dir.x && pendingDir.y === -dir.y)){
+        dir = pendingDir;
+      }
+
+      const head = snake[0];
+      let nx = head.x + dir.x;
+      let ny = head.y + dir.y;
+
+      if(nx < 0 || nx >= cols || ny < 0 || ny >= rows || willHitSelf(nx, ny)){
+        const alts = (dir.x !== 0)
+          ? [{x:0,y:1},{x:0,y:-1}]
+          : [{x:1,y:0},{x:-1,y:0}];
+
+        let turned = false;
+        for(const a of alts){
+          const tx = head.x + a.x;
+          const ty = head.y + a.y;
+          if(tx>=0 && tx<cols && ty>=0 && ty<rows && !willHitSelf(tx, ty)){
+            pendingDir = a;
+            dir = a;
+            nx = tx; ny = ty;
+            turned = true;
+            break;
+          }
+        }
+        if(!turned){
+          resetSnake();
+          return;
+        }
+      }
+
+      snake.unshift({x:nx, y:ny});
+      snake.pop();
+    }
+
+    function drawSnakeNokia(){
+      resizeSnake();
+      const rect = snakeCanvas.getBoundingClientRect();
+      const W = rect.width, H = rect.height;
+
+      sctx.clearRect(0,0,W,H);
+
+      sctx.globalAlpha = 0.10;
+      sctx.lineWidth = 1;
+      sctx.strokeStyle = "white";
+      for(let x=0; x<=cols; x++){
+        const px = pad + x*cell;
+        sctx.beginPath(); sctx.moveTo(px, pad); sctx.lineTo(px, pad+rows*cell); sctx.stroke();
+      }
+      for(let y=0; y<=rows; y++){
+        const py = pad + y*cell;
+        sctx.beginPath(); sctx.moveTo(pad, py); sctx.lineTo(pad+cols*cell, py); sctx.stroke();
+      }
+      sctx.globalAlpha = 1;
+
+      for(let i=snake.length-1; i>=0; i--){
+        const b = snake[i];
+        const x = pad + b.x*cell;
+        const y = pad + b.y*cell;
+
+        const a = Math.max(0.18, 1 - i*0.06);
+
+        sctx.fillStyle = `rgba(255,255,255,${0.08*a})`;
+        sctx.fillRect(x-2, y-2, cell+4, cell+4);
+
+        sctx.fillStyle = `rgba(255,255,255,${0.78*a})`;
+        sctx.fillRect(x+1, y+1, cell-2, cell-2);
+      }
+
+      const h = snake[0];
+      const hx = pad + h.x*cell;
+      const hy = pad + h.y*cell;
+
+      const pulse = 0.6 + 0.4*Math.sin(glowT*3.2);
+
+      sctx.fillStyle = `rgba(255,216,107,${0.20 + 0.12*pulse})`;
+      sctx.fillRect(hx-4, hy-4, cell+8, cell+8);
+
+      sctx.fillStyle = `rgba(255,216,107,0.90)`;
+      sctx.fillRect(hx+1, hy+1, cell-2, cell-2);
+
+      sctx.globalAlpha = 0.85;
+      sctx.font = "14px Audiowide, system-ui, sans-serif";
+      sctx.fillStyle = "rgba(255,255,255,0.85)";
+      sctx.textAlign = "right";
+      sctx.fillText("loading start…", W - 12, H - 10);
+      sctx.globalAlpha = 1;
+    }
+
+    function pad2(n){ return String(n).padStart(2, "0"); }
+
+    let last = performance.now();
+    function tickCountdownFrame(now){
+      const dt = Math.min(0.05, (now - last)/1000);
+      last = now;
+
+      glowT += dt;
+
+      const n = new Date();
+      let diff = target - n;
+      if(diff < 0) diff = 0;
+
+      const s = Math.floor(diff / 1000);
+      const days = Math.floor(s / 86400);
+      const hours = Math.floor((s % 86400) / 3600);
+      const mins = Math.floor((s % 3600) / 60);
+      const secs = s % 60;
+
+      cdDays.textContent = String(days);
+      cdHours.textContent = pad2(hours);
+      cdMins.textContent = pad2(mins);
+      cdSecs.textContent = pad2(secs);
+
+      buildGrid();
+      autoTurn();
+
+      stepAcc += dt;
+      while(stepAcc >= stepTime){
+        stepSnake();
+        stepAcc -= stepTime;
+      }
+
+      drawSnakeNokia();
+      requestAnimationFrame(tickCountdownFrame);
+    }
+
+    // ---------------------------
+    // 5) CONTACT -> "moving QR"
+    // ---------------------------
+    const qrCanvas = document.getElementById("qr");
+    const qctx = qrCanvas.getContext("2d");
+
+    function resizeQR(){
+      const dpr = window.devicePixelRatio || 1;
+      const rect = qrCanvas.getBoundingClientRect();
+      const w = Math.round(rect.width * dpr);
+      const h = Math.round(rect.height * dpr);
+      if (qrCanvas.width !== w || qrCanvas.height !== h){
+        qrCanvas.width = w;
+        qrCanvas.height = h;
+        qctx.setTransform(1,0,0,1,0,0);
+        qctx.scale(dpr, dpr);
+      }
+    }
+
+    // QR-like matrix (troll, ale vypadá legit)
+    const Q = 33; // velikost "QR" mřížky
+    let qr = [];
+    let qrT = 0;
+
+    function makeMatrix(){
+      qr = new Array(Q).fill(0).map(()=> new Array(Q).fill(0));
+      // base random pattern
+      for(let y=0;y<Q;y++){
+        for(let x=0;x<Q;x++){
+          qr[y][x] = (Math.random() < 0.45) ? 1 : 0;
+        }
+      }
+      // add "finder squares" (jen vizuál)
+      placeFinder(0,0);
+      placeFinder(Q-7,0);
+      placeFinder(0,Q-7);
+
+      // "quiet zone" okraj
+      for(let i=0;i<Q;i++){
+        qr[0][i]=0; qr[Q-1][i]=0;
+        qr[i][0]=0; qr[i][Q-1]=0;
+      }
+    }
+
+    function placeFinder(px,py){
+      for(let y=0;y<7;y++){
+        for(let x=0;x<7;x++){
+          const X=px+x, Y=py+y;
+          const border = (x===0||y===0||x===6||y===6);
+          const inner  = (x>=2 && x<=4 && y>=2 && y<=4);
+          qr[Y][X] = (border || inner) ? 1 : 0;
+        }
+      }
+    }
+
+    function isFinderZone(x,y){
+      // 3 finder rohy: 7x7 zóny
+      const inA = (x>=0 && x<7 && y>=0 && y<7);
+      const inB = (x>=Q-7 && x<Q && y>=0 && y<7);
+      const inC = (x>=0 && x<7 && y>=Q-7 && y<Q);
+      return inA || inB || inC;
+    }
+
+    function swapRandomModules(){
+      // přesouváme jen "běžné" moduly mimo findery + mimo okraj
+      for(let k=0;k<14;k++){
+        let x1,y1,x2,y2;
+        let tries=0;
+        do{
+          x1 = 1 + Math.floor(Math.random()*(Q-2));
+          y1 = 1 + Math.floor(Math.random()*(Q-2));
+          tries++;
+        }while((isFinderZone(x1,y1)) && tries<80);
+
+        tries=0;
+        do{
+          x2 = 1 + Math.floor(Math.random()*(Q-2));
+          y2 = 1 + Math.floor(Math.random()*(Q-2));
+          tries++;
+        }while((isFinderZone(x2,y2)) && tries<80);
+
+        // swap
+        const tmp = qr[y1][x1];
+        qr[y1][x1] = qr[y2][x2];
+        qr[y2][x2] = tmp;
+      }
+    }
+
+    function drawQR(){
+      resizeQR();
+      const rect = qrCanvas.getBoundingClientRect();
+      const W = rect.width, H = rect.height;
+      qctx.clearRect(0,0,W,H);
+
+      // vycentrovat čtvercovou oblast
+      const size = Math.min(W, H);
+      const offsetX = (W - size)/2;
+      const offsetY = (H - size)/2;
+
+      // modul size
+      const mod = Math.floor(size / (Q + 4)); // + okraj
+      const gridSize = mod * (Q + 4);
+      const gx = offsetX + (size - gridSize)/2;
+      const gy = offsetY + (size - gridSize)/2;
+
+      // background glow
+      qctx.globalAlpha = 0.10;
+      qctx.fillStyle = "white";
+      qctx.fillRect(gx-10, gy-10, gridSize+20, gridSize+20);
+      qctx.globalAlpha = 1;
+
+      // quiet zone 2 moduly
+      const qz = 2;
+
+      // draw modules
+      for(let y=0;y<Q;y++){
+        for(let x=0;x<Q;x++){
+          const v = qr[y][x];
+          if(!v) continue;
+
+          const px = gx + (x+qz)*mod;
+          const py = gy + (y+qz)*mod;
+
+          // micro jiggle (vizuální vibe) – posun jen o 0/1 px
+          const jig = (Math.sin(qrT*2 + x*0.4 + y*0.25) > 0.6) ? 1 : 0;
+
+          // glow
+          qctx.fillStyle = "rgba(255,255,255,0.10)";
+          qctx.fillRect(px-2, py-2, mod+4, mod+4);
+
+          // block
+          qctx.fillStyle = "rgba(255,255,255,0.92)";
+          qctx.fillRect(px+1+jig, py+1, mod-2, mod-2);
+        }
+      }
+
+      // highlight finder corners
+      qctx.globalAlpha = 0.9;
+      qctx.fillStyle = "rgba(255,216,107,0.12)";
+      const f = 7*mod;
+      qctx.fillRect(gx + qz*mod, gy + qz*mod, f, f);
+      qctx.fillRect(gx + (Q-7+qz)*mod, gy + qz*mod, f, f);
+      qctx.fillRect(gx + qz*mod, gy + (Q-7+qz)*mod, f, f);
+      qctx.globalAlpha = 1;
+
+      // label
+      qctx.globalAlpha = 0.78;
+      qctx.font = "14px Audiowide, system-ui, sans-serif";
+      qctx.fillStyle = "rgba(255,255,255,0.85)";
+      qctx.textAlign = "right";
+      qctx.globalAlpha = 1;
+    }
+
+    let lastQR = performance.now();
+    function tickQR(now){
+      const dt = Math.min(0.05, (now - lastQR)/1000);
+      lastQR = now;
+      qrT += dt;
+
+      // každou chvíli "přeházej" moduly
+      if(Math.random() < 0.35){
+        swapRandomModules();
+      }
+
+      drawQR();
+      requestAnimationFrame(tickQR);
+    }
+
+    // ---------------------------
+    // INIT EVERYTHING
+    // ---------------------------
+    renderChart(players);
+    setInterval(tickPlayers, tickMs);
+    dotSpawner();
+
+    showReview(reviewIndex);
+    reviewBox.classList.add("fadeIn");
+    setInterval(rotateReview, 3000);
+
+    resetSnake();
+    requestAnimationFrame(tickCountdownFrame);
+
+    makeMatrix();
+    requestAnimationFrame(tickQR);
+
+    window.addEventListener("resize", () => {
+      renderChart(players);
+      resetSnake();
+      drawQR();
+    });
+  </script>
+
+</body>
+</html>
